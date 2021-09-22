@@ -1,6 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import typescript  from 'rollup-plugin-typescript2';
+import typescript from 'rollup-plugin-typescript2';
 
 export const globals = {
   // Apollo
@@ -29,12 +29,12 @@ export default {
   plugins: [
     resolve({ module: true }),
     commonjs(),
-		typescript({
+    typescript({
       tsconfigOverride: {
         compilerOptions: {
-          module: "es2015",
+          module: 'es2015',
         },
       },
     }),
-	],
+  ],
 };
