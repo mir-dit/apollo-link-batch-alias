@@ -1,6 +1,6 @@
 {
   "name": "@mir-dit/apollo-link-batch-alias",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Batches multiple operations into a single HTTP request. Uses aliasies under the hood.",
   "main": "dist/main.js",
   "scripts": {
