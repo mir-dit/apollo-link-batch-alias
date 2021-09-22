@@ -1,0 +1,11 @@
+# Sources
+src
+
+# CI
+.github
+
+# Configs
+babel.config.js
+tsconfig.json
+rollup.config.js
+jest.config.ts
