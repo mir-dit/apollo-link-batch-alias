@@ -28,6 +28,8 @@
   "homepage": "https://github.com/mir-dit/apollo-link-batch-alias#readme",
   "devDependencies": {
     "@babel/preset-typescript": "^7.15.0",
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@types/jest": "^27.0.2",
     "@types/zen-observable": "^0.8.3",

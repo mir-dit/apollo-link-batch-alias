@@ -9,3 +9,8 @@ babel.config.js
 tsconfig.json
 rollup.config.js
 jest.config.ts
+commitlint.config.js
+
+# Other
+.eslintcache
+.husky
