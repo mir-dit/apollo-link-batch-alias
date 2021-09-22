@@ -13,7 +13,6 @@ import {
 import { BatchLink } from 'apollo-link-batch';
 import combineQuery from 'graphql-combine-query';
 
-// tslint:disable-next-line:no-namespace
 export namespace AliasBatchHttpLink {
   export interface Options extends HttpOptions {
     /**
@@ -104,15 +103,15 @@ export class AliasBatchHttpLink extends ApolloLink {
       };
 
       const newOperation = createOperation(
-        {},
-        { query: document, operationName: '__compose', variables, context }
+          {},
+          { query: document, operationName: '__compose', variables, context },
       );
 
       const loadedBody = selectHttpOptionsAndBody(
-        newOperation,
-        fallbackHttpConfig,
-        linkConfig,
-        contextConfig
+          newOperation,
+          fallbackHttpConfig,
+          linkConfig,
+          contextConfig,
       );
       const options = loadedBody.options;
 
@@ -136,27 +135,27 @@ export class AliasBatchHttpLink extends ApolloLink {
 
       return new Observable<FetchResult[]>((observer) => {
         fetcher(chosenURI, options)
-          .then((response) => {
+            .then((response) => {
             // Make the raw response available in the context.
-            operations.forEach((operation) => operation.setContext({ response }));
-            return response;
-          })
-          .then(parseAndCheckHttpResponse(operations))
-          .then(parseCombinedResult(operations))
-          .then((result) => {
+              operations.forEach((operation) => operation.setContext({ response }));
+              return response;
+            })
+            .then(parseAndCheckHttpResponse(operations))
+            .then(parseCombinedResult(operations))
+            .then((result) => {
             // we have data and can send it to back up the link chain
-            observer.next(result);
-            observer.complete();
-            return result;
-          })
-          .catch((err) => {
-            if (err.name === 'AbortError') return;
-            if (err.result && err.result.errors && err.result.data) {
-              observer.next(err.result);
-            }
+              observer.next(result);
+              observer.complete();
+              return result;
+            })
+            .catch((err) => {
+              if (err.name === 'AbortError') return;
+              if (err.result && err.result.errors && err.result.data) {
+                observer.next(err.result);
+              }
 
-            observer.error(err);
-          });
+              observer.error(err);
+            });
 
         return () => {
           // XXX support canceling this request
@@ -198,43 +197,43 @@ export class AliasBatchHttpLink extends ApolloLink {
 export const parseAndCheckHttpResponse = (operations) => (response: Response) => {
   return (
     response
-      .text()
-      .then((bodyText) => {
-        try {
-          return JSON.parse(bodyText);
-        } catch (err) {
-          const parseError = err as ServerParseError;
-          parseError.name = 'ServerParseError';
-          parseError.response = response;
-          parseError.statusCode = response.status;
-          parseError.bodyText = bodyText;
-          return Promise.reject(parseError);
-        }
-      })
-      // TODO: when conditional types come out then result should be T extends Array ? Array<FetchResult> : FetchResult
-      .then((result: any) => {
-        if (response.status >= 300) {
+        .text()
+        .then((bodyText) => {
+          try {
+            return JSON.parse(bodyText);
+          } catch (err) {
+            const parseError = err as ServerParseError;
+            parseError.name = 'ServerParseError';
+            parseError.response = response;
+            parseError.statusCode = response.status;
+            parseError.bodyText = bodyText;
+            return Promise.reject(parseError);
+          }
+        })
+    // TODO: when conditional types come out then result should be T extends Array ? Array<FetchResult> : FetchResult
+        .then((result: any) => {
+          if (response.status >= 300) {
           // Network error
-          throwServerError(
-            response,
-            result,
-            `Response not successful: Received status code ${response.status}`
-          );
-        }
-        // TODO should really error per response in a Batch based on properties
-        //    - could be done in a validation link
-        if (!result.hasOwnProperty('data') && !result.hasOwnProperty('errors')) {
+            throwServerError(
+                response,
+                result,
+                `Response not successful: Received status code ${response.status}`,
+            );
+          }
+          // TODO should really error per response in a Batch based on properties
+          //    - could be done in a validation link
+          if (!result.hasOwnProperty('data') && !result.hasOwnProperty('errors')) {
           // Data error
-          throwServerError(
-            response,
-            result,
-            `Server response was missing for query '${
+            throwServerError(
+                response,
+                result,
+                `Server response was missing for query '${
               Array.isArray(operations) ? operations.map((op) => op.operationName) : operations.operationName
-            }'.`
-          );
-        }
-        return result;
-      })
+                }'.`,
+            );
+          }
+          return result;
+        })
   );
 };
 
@@ -249,11 +248,11 @@ export const parseCombinedResult = (operations: Operation[]) => (result) => {
     }, {});
 
     const errors = selections
-      .map((s) => {
-        const name: string = s.alias?.value || s.name.value;
-        return result.errors?.filter((err) => err.path[0] === `${name}_${index}`) || [];
-      })
-      .flat();
+        .map((s) => {
+          const name: string = s.alias?.value || s.name.value;
+          return result.errors?.filter((err) => err.path[0] === `${name}_${index}`) || [];
+        })
+        .flat();
 
     return { data: fields, errors: errors.length ? errors : null };
   });
