@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/mir-dit/apollo-link-batch-alias#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
@@ -37,6 +38,7 @@
     "@typescript-eslint/parser": "^4.31.2",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
+    "graphql": "^15.6.0",
     "husky": "^7.0.2",
     "jest": "^27.2.1",
     "lint-staged": "^11.1.2",
