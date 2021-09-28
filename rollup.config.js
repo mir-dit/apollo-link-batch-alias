@@ -4,7 +4,10 @@ import typescript from 'rollup-plugin-typescript2';
 
 export const globals = {
   // Apollo
-  'zen-observable-ts': 'apolloLink.zenObservable',
+  '@apollo/client/link/core': 'apollo.client.link.core',
+  '@apollo/client/link/utils': 'apollo.client.link.utils',
+  '@apollo/client/link/http': 'apollo.client.link.http',
+  '@apollo/client/link/batch': 'apollo.client.link.batch',
 
   // GraphQL
   'graphql/language/visitor': 'graphql.visitor',
@@ -14,6 +17,7 @@ export const globals = {
   'tslib': 'tslib',
 
   // Other
+  'zen-observable-ts': 'apolloLink.zenObservable',
   'zen-observable': 'Observable',
 };
 

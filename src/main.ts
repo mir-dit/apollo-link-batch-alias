@@ -1,4 +1,5 @@
-import { ApolloLink, Operation, FetchResult, Observable, fromError, createOperation } from 'apollo-link';
+import { ApolloLink, Operation, FetchResult } from '@apollo/client/link/core';
+import { fromError, createOperation, throwServerError } from '@apollo/client/link/utils';
 import {
   serializeFetchParameter,
   selectURI,
@@ -8,9 +9,9 @@ import {
   fallbackHttpConfig,
   HttpOptions,
   ServerParseError,
-  throwServerError,
-} from 'apollo-link-http-common';
-import { BatchLink } from 'apollo-link-batch';
+} from '@apollo/client/link/http';
+import { BatchLink } from '@apollo/client/link/batch';
+import { Observable } from 'zen-observable-ts';
 import combineQuery from 'graphql-combine-query';
 
 /**
@@ -18,15 +19,25 @@ import combineQuery from 'graphql-combine-query';
  * context can include the headers property, which will be passed to the fetch function
  */
 export class AliasBatchHttpLink extends ApolloLink {
+  private batchDebounce?: boolean;
   private batchInterval: number;
   private batchMax: number;
   private batcher: ApolloLink;
 
   constructor(fetchParams?: AliasBatchHttpLink.Options) {
     super();
-    fetchParams = fetchParams || ({} as AliasBatchHttpLink.Options);
-    const { uri = '/graphql', includeExtensions, batchInterval, batchMax, ...requestOptions } = fetchParams;
-    let { fetch: fetcher, batchKey } = fetchParams;
+
+    let {
+      uri = '/graphql',
+      // use default global fetch if nothing is passed in
+      fetch: fetcher,
+      includeExtensions,
+      batchInterval,
+      batchDebounce,
+      batchMax,
+      batchKey,
+      ...requestOptions
+    } = fetchParams || ({} as AliasBatchHttpLink.Options);
 
     // dev warnings to ensure fetch is present
     checkFetcher(fetcher);
@@ -45,6 +56,7 @@ export class AliasBatchHttpLink extends ApolloLink {
       headers: requestOptions.headers,
     };
 
+    this.batchDebounce = batchDebounce;
     this.batchInterval = batchInterval || 10;
     this.batchMax = batchMax || 10;
 
@@ -94,7 +106,7 @@ export class AliasBatchHttpLink extends ApolloLink {
 
       // There's no spec for using GET with batches.
       if (options.method === 'GET') {
-        return fromError<FetchResult[]>(new Error('alias-batch-http-link does not support GET requests'));
+        return fromError<FetchResult[]>(new Error('apollo-link-batch-alias does not support GET requests'));
       }
 
       try {
@@ -159,6 +171,7 @@ export class AliasBatchHttpLink extends ApolloLink {
       });
 
     this.batcher = new BatchLink({
+      batchDebounce: this.batchDebounce,
       batchInterval: this.batchInterval,
       batchMax: this.batchMax,
       batchKey,
@@ -243,6 +256,13 @@ export namespace AliasBatchHttpLink {
      * Defaults to 10.
      */
     batchMax?: number;
+
+    /**
+     * If true then debounce queries.
+     *
+     * Defaults to false.
+     */
+    batchDebounce?: boolean;
 
     /**
      * The interval at which to batch, in milliseconds.
