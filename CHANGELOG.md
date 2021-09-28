@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.0.1 (2021-09-28)
+
+
+### Bug Fixes
+
+* type fixed ([9acdf6b](https://github.com/mir-dit/apollo-link-batch-alias/commit/9acdf6b2d8450afdd211512d5b5135b56cc39604))
+
 ## 2.0.0 (2021-09-28)
 
 
