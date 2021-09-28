@@ -1,6 +1,7 @@
-import { ApolloLink, Operation, FetchResult } from '@apollo/client/link/core';
-import { fromError, createOperation, throwServerError } from '@apollo/client/link/utils';
 import {
+  ApolloLink,
+  Operation,
+  FetchResult,
   serializeFetchParameter,
   selectURI,
   checkFetcher,
@@ -9,9 +10,12 @@ import {
   fallbackHttpConfig,
   HttpOptions,
   ServerParseError,
-} from '@apollo/client/link/http';
+  Observable,
+  fromError,
+  throwServerError,
+} from '@apollo/client/core';
+import { createOperation } from '@apollo/client/link/utils';
 import { BatchLink } from '@apollo/client/link/batch';
-import { Observable } from 'zen-observable-ts';
 import combineQuery from 'graphql-combine-query';
 
 /**

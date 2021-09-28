@@ -4,9 +4,8 @@ import typescript from 'rollup-plugin-typescript2';
 
 export const globals = {
   // Apollo
-  '@apollo/client/link/core': 'apollo.client.link.core',
+  '@apollo/client/core': 'apollo.client.core',
   '@apollo/client/link/utils': 'apollo.client.link.utils',
-  '@apollo/client/link/http': 'apollo.client.link.http',
   '@apollo/client/link/batch': 'apollo.client.link.batch',
 
   // GraphQL
