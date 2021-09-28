@@ -249,31 +249,8 @@ export const parseCombinedResult = (operations: Operation[]) => (result) => {
 };
 
 export namespace AliasBatchHttpLink {
-  export interface Options extends HttpOptions {
-    /**
-     * The maximum number of operations to include in one fetch.
-     *
-     * Defaults to 10.
-     */
-    batchMax?: number;
-
-    /**
-     * If true then debounce queries.
-     *
-     * Defaults to false.
-     */
-    batchDebounce?: boolean;
-
-    /**
-     * The interval at which to batch, in milliseconds.
-     *
-     * Defaults to 10.
-     */
-    batchInterval?: number;
-
-    /**
-     * Sets the key for an Operation, which specifies the batch an operation is included in
-     */
-    batchKey?: (operation: Operation) => string;
-  }
+  export type Options = Pick<
+    BatchLink.Options,
+    'batchMax' | 'batchDebounce' | 'batchInterval' | 'batchKey'
+  > & HttpOptions;
 }
